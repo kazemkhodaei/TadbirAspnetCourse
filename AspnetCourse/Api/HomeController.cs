@@ -8,37 +8,20 @@ using AspnetCourse.Models;
 
 namespace AspnetCourse.Controllers
 {
-    public class HomeController : Controller
+    [Route("api/[controller]")]
+    public class UserController : Controller
     {
-        [Route("api/[controller]/myIndex")]
-        public IActionResult Index()
+        [HttpPost]
+        public IActionResult SaveUser()
         {
-            return View();
+            return Content("Save");
         }
 
-        public IActionResult About(string everything, string id)
+        [HttpGet]
+        [Produces("application/json", "application/xml")]
+        public User GetUser()
         {
-            
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return new User{ Name="Michael", Address = "New York"};
         }
     }
 }
