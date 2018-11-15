@@ -10,6 +10,7 @@ namespace AspnetCourse.Controllers
 {
     public class HomeController : Controller
     {
+        [Route("api/[controller]/myIndex")]
         public IActionResult Index()
         {
             return View();

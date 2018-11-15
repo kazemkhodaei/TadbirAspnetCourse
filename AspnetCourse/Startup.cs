@@ -60,10 +60,6 @@ namespace AspnetCourse
                     template: "{area:exists}/{controller=Home}/{action=Index}");
 
                 routes.MapRoute(
-                    name: "",
-                    template: "{controller=Home}/{action=Index}");
-
-                routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}/{*everything}");
             });
