@@ -18,7 +18,8 @@ namespace AspnetCourse.Controllers
             return user;
         }
 
-        [HttpGet]
+        [HttpGet("{format?}")]
+        [FormatFilter]
         public User GetUser()
         {
             return new User{ Name="Michael", Address = "New York"};
