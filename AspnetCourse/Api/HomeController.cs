@@ -18,11 +18,10 @@ namespace AspnetCourse.Controllers
             return user;
         }
 
-        [HttpGet("{format?}")]
-        [FormatFilter]
-        public User GetUser()
+        [AcceptVerbs("PUT", "PATCH")]
+        public JsonResult GetUser()
         {
-            return new User{ Name="Michael", Address = "New York"};
+            return Json(new User{ Name="Michael", Address = "New York"});
         }
     }
 }
