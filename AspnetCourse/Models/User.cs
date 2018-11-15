@@ -10,4 +10,10 @@ namespace AspnetCourse.Models
         public string Name { get; set; }
         public string Address { get; set; }
     }
+
+    public class Customer
+    {
+        public string Name { get; set; }
+        public string Address { get; set; }
+    }
 }

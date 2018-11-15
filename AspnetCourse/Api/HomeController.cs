@@ -19,7 +19,6 @@ namespace AspnetCourse.Controllers
         }
 
         [HttpGet]
-        [Produces("application/json", "application/xml")]
         public User GetUser()
         {
             return new User{ Name="Michael", Address = "New York"};

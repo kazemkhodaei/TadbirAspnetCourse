@@ -32,7 +32,13 @@ namespace AspnetCourse
             });
 
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddXmlDataContractSerializerFormatters();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddXmlDataContractSerializerFormatters()
+                .AddMvcOptions(opts =>
+                {
+                    opts.RespectBrowserAcceptHeader = true;
+                    opts.ReturnHttpNotAcceptable = true;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +59,8 @@ namespace AspnetCourse
             app.UseCookiePolicy();
 
             app.UseMvc();
+
+
         }
     }
 }
