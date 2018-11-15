@@ -13,13 +13,13 @@ namespace AspnetCourse.Controllers
     {
         [HttpPost]
         [Consumes("application/json")]
-        public User SaveUser([FromBody] User user)
+        public string SaveUser([FromBody] User user)
         {
-            return user;
+            return Url.Action(nameof(GetUser1));
         }
 
         [AcceptVerbs("PUT", "PATCH")]
-        public JsonResult GetUser()
+        public JsonResult GetUser1()
         {
             return Json(new User{ Name="Michael", Address = "New York"});
         }
