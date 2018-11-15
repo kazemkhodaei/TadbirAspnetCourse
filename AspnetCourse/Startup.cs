@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspnetCourse.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -33,6 +35,8 @@ namespace AspnetCourse
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.Configure<RouteOptions>(options => options.ConstraintMap.Add("existsInDb", typeof(ExistsInDbConstraint)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,17 +59,11 @@ namespace AspnetCourse
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "",
-                    template: "api/{area:exists}/{controller=Home}/{action=Index}");
-
-                routes.MapRoute(
-                    name: "",
-                    template: "{area:exists}/{controller=Home}/{action=Index}");
-
-                routes.MapRoute(
                     "default",
-                    "{controller=Home}/{action=Index}/{id?}", new { myVal = "v1" });
+                    "{controller=Home}/{action:existsInDb}/{id?}");
             });
+
+
         }
     }
 }

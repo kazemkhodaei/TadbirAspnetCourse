@@ -14,5 +14,10 @@ namespace AspnetCourse.Api
         {
             return myVal;
         }
+
+        public string Update(string myVal)
+        {
+            return myVal;
+        }
     }
 }
