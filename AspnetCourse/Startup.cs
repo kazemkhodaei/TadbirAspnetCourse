@@ -63,6 +63,11 @@ namespace AspnetCourse
                     "{controller=Home}/{action:existsInDb}/{id?}");
             });
 
+            app.UseMvc(routes => {
+                routes.Routes.Add(new CustomeRouter(app.ApplicationServices, "/articles/Windows_3.1_Overview.html", "/old/.NET_1.0_Class_Library"));
+                routes.Routes.Add(new CustomeRouter(app.ApplicationServices, "/articles/Windows_3.1_Overview.html", "/old/.NET_1.0_Class_Library"));
+                routes.Routes.Add(new CustomeRouter(app.ApplicationServices, "/articles/Windows_3.1_Overview.html", "/old/.NET_1.0_Class_Library"));
+            });
 
         }
     }

@@ -12,7 +12,8 @@ namespace AspnetCourse.Api
         // GET: Customer
         public string Index(string myVal)
         {
-            return myVal;
+            return RouteData.Values["legacyUrl"].ToString();
+            //return myVal;
         }
 
         public string Update(string myVal)
