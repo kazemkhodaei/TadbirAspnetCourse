@@ -54,16 +54,18 @@ namespace AspnetCourse
 
             app.UseMvc(routes =>
             {
+
+                routes.MapRoute(
+                    name: "",
+                    template: "{area:exists}/{controller=Home}/{action=Index}");
+
+                routes.MapRoute(
+                    name: "",
+                    template: "{controller=Home}/{action=Index}");
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}/{*everything}");
-            });
-
-            app.UseMvc(routes => {
-                routes.MapRoute(
-                    name: "",
-                    template: "{*all}",
-                    defaults: new { controller="Home" , action = "Index" });
             });
         }
     }
