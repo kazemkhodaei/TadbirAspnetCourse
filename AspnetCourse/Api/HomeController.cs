@@ -12,9 +12,10 @@ namespace AspnetCourse.Controllers
     public class UserController : Controller
     {
         [HttpPost]
-        public IActionResult SaveUser()
+        [Consumes("application/json")]
+        public User SaveUser([FromBody] User user)
         {
-            return Content("Save");
+            return user;
         }
 
         [HttpGet]
