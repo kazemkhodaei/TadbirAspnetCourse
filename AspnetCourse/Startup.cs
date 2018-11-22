@@ -39,8 +39,16 @@ namespace AspnetCourse
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseMiddleware<ContentMiddleware>();
+            //app.UseMiddleware<ShortCircutMiddleware>();
+            app.MapWhen(context => context.Request.Path == "/home/index", builder =>
+            {
+                builder.Run(async context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status302Found;
+                });
+            });
             app.UseMvcWithDefaultRoute();
+
         }
     }
 }

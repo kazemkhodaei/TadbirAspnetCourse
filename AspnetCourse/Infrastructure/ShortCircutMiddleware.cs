@@ -5,22 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace AspnetCourse.Infrastructure
 {
-    public class ContentMiddleware
+    public class ShortCircutMiddleware
     {
         private readonly RequestDelegate _next;
-        public ContentMiddleware(RequestDelegate next)
+        public ShortCircutMiddleware(RequestDelegate next)
         {
             _next = next;
         }
 
-        public async Task Invoke(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext httpContext)
         {
-            if (httpContext.Request.Path.ToString().ToLower() == "/middleware")
+            if (httpContext.Request.Path.ToString().ToLower() == "/home/index")
             {
-                await httpContext.Response.WriteAsync("This is from the content middleware", Encoding.UTF8);
+                httpContext.Response.StatusCode = 404;
             }
             else
             {
