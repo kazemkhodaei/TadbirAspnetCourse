@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AspnetCourse.Infrastructure;
@@ -34,18 +35,27 @@ namespace AspnetCourse
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddResponseCompression();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //app.UseMiddleware<ShortCircutMiddleware>();
-            app.MapWhen(context => context.Request.Path == "/home/index", builder =>
+            //app.UseMiddleware<ConfigMiddleware>();
+
+            //app.UseResponseCompression();
+            app.UseStaticFiles(new StaticFileOptions()
             {
-                builder.Run(async context =>
+                // use the following tar-gz conversion tool to convert the files to gzip
+                // https://www.online-convert.com/result/f87c374d-1fcd-4440-88b6-a8f1452049ad
+                OnPrepareResponse = context =>
                 {
-                    context.Response.StatusCode = StatusCodes.Status302Found;
-                });
+                    if (context.File.Name.EndsWith("js.gz"))
+                    {
+                        context.Context.Response.Headers.Add("Content-Encoding", "gzip");
+                        context.Context.Response.Headers["Content-Type"]= "application/javascript";
+                    }
+                }
             });
             app.UseMvcWithDefaultRoute();
 
