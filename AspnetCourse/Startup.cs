@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AspnetCourse.Controllers;
 using AspnetCourse.Infrastructure;
+using AspnetCourse.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace AspnetCourse
 {
@@ -34,16 +37,27 @@ namespace AspnetCourse
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddResponseCompression();
+            services.AddHttpContextAccessor();
+
+            
+            services.AddSession();
+
+            services.AddScoped<User>(sp =>
+            {
+                ISession session = sp.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
+                User user = JsonConvert.DeserializeObject<User>(session.GetString("User")) ?? new User();
+
+                return user;
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //app.UseMiddleware<ConfigMiddleware>();
-
-            //app.UseResponseCompression();
             app.UseStaticFiles(new StaticFileOptions()
             {
                 // use the following tar-gz conversion tool to convert the files to gzip
@@ -53,10 +67,12 @@ namespace AspnetCourse
                     if (context.File.Name.EndsWith("js.gz"))
                     {
                         context.Context.Response.Headers.Add("Content-Encoding", "gzip");
-                        context.Context.Response.Headers["Content-Type"]= "application/javascript";
+                        context.Context.Response.Headers["Content-Type"] = "application/javascript";
                     }
                 }
             });
+
+            app.UseSession();
             app.UseMvcWithDefaultRoute();
 
         }
