@@ -20,29 +20,29 @@ namespace AspnetCourse.Controllers
         {
 
         }
-        
-        [HttpsOnly]
+
+        [MyFilter]
         public IActionResult Index(IDistributedCache cache)
         {
 
             return Content("I ran!");
         }
 
-        [HttpsOnly]
-        public IActionResult SetSession()
+        [MyFilter]
+        public IActionResult SetSession(string id, string name)
         {
 
             return Content("Set done!");
         }
     }
 
-    public class HttpsOnlyAttribute : Attribute, IAuthorizationFilter
+    public class MyFilter : ActionFilterAttribute
     {
-        public void OnAuthorization(AuthorizationFilterContext context)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (!context.HttpContext.Request.IsHttps)
+            if ((string)context.ActionArguments["id"] == "1")
             {
-                context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
+                context.Result = new ContentResult() { Content = "1" };
             }
         }
     }
