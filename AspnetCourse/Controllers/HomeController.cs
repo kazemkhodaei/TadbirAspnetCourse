@@ -25,29 +25,39 @@ namespace AspnetCourse.Controllers
         //[MyFilter(new UserRepository())]
         public IActionResult Index(IDistributedCache cache)
         {
-
             return Content("I ran!");
         }
 
-        [ServiceFilter(typeof(MyFilter))]
-        public IActionResult SetSession(string id, string name)
+
+
+        public IActionResult SetSession(int id)
         {
-            return Content("");
+            return Content((10 / id).ToString());
         }
     }
 
-    public class MyFilter : ActionFilterAttribute
+    public class MyFilter : ExceptionFilterAttribute
     {
-        private readonly UserRepository _repository;
-
-        public MyFilter(UserRepository repository)
+        public MyFilter()
         {
-            _repository = repository;
+
         }
 
-        public override void OnActionExecuted(ActionExecutedContext context)
+        public override void OnException(ExceptionContext context)
         {
-            base.OnActionExecuted(context);
+            if (context.Exception is DivideByZeroException)
+            {
+                var x = context.RouteData.Values["action"];
+                context.Result = new ContentResult() { Content = "error" };
+                context.HttpContext.Response.StatusCode = 403;
+
+                context.ExceptionHandled = true;
+            }
+        }
+
+        public override Task OnExceptionAsync(ExceptionContext context)
+        {
+            return base.OnExceptionAsync(context);
         }
     }
 }

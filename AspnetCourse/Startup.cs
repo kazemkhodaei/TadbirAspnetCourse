@@ -39,7 +39,7 @@ namespace AspnetCourse
 
             services.AddScoped<UserRepository>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().AddMvcOptions(options => { options.Filters.Add<MyFilter>(); }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddHttpContextAccessor();
 
             
