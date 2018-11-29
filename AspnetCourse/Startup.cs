@@ -37,14 +37,13 @@ namespace AspnetCourse
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            services.AddScoped<UserRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddHttpContextAccessor();
 
             
             services.AddSession();
-
             services.AddScoped<User>(sp =>
             {
                 ISession session = sp.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;

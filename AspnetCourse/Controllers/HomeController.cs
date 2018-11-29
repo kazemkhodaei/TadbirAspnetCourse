@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using AspnetCourse.Infrastructure;
@@ -21,29 +22,32 @@ namespace AspnetCourse.Controllers
 
         }
 
-        [MyFilter]
+        //[MyFilter(new UserRepository())]
         public IActionResult Index(IDistributedCache cache)
         {
 
             return Content("I ran!");
         }
 
-        [MyFilter]
+        [ServiceFilter(typeof(MyFilter))]
         public IActionResult SetSession(string id, string name)
         {
-
-            return Content("Set done!");
+            return Content("");
         }
     }
 
     public class MyFilter : ActionFilterAttribute
     {
-        public override void OnActionExecuting(ActionExecutingContext context)
+        private readonly UserRepository _repository;
+
+        public MyFilter(UserRepository repository)
         {
-            if ((string)context.ActionArguments["id"] == "1")
-            {
-                context.Result = new ContentResult() { Content = "1" };
-            }
+            _repository = repository;
+        }
+
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            base.OnActionExecuted(context);
         }
     }
 }
