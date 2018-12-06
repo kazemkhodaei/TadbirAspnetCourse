@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AspnetCourse.Infrastructure;
 using AspnetCourse.Models;
@@ -22,12 +23,12 @@ namespace AspnetCourse.Controllers
 
         }
 
-        //[MyFilter(new UserRepository())]
-        public IActionResult Index(IDistributedCache cache)
+        [HttpGet]
+        public string Index()
         {
-            return Content("I ran!");
+            Thread.Sleep(10000);
+            return "Finished";
         }
-
 
 
         public IActionResult SetSession(int id)

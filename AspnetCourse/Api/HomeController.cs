@@ -5,12 +5,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AspnetCourse.Models;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace AspnetCourse.Controllers
 {
-    [Route("api/[controller]")]
     public class UserController : Controller
     {
+        [HttpGet]
+        public string Index()
+        {
+            Task.Delay(2000).Wait();
+            return "Finished";
+        }
+
         [HttpPost]
         [Consumes("application/json")]
         public string SaveUser([FromBody] User user)
