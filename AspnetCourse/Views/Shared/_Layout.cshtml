@@ -68,7 +68,14 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
-
+    @if (IsSectionDefined("Footer"))
+    {
+        @RenderSection("Footer")
+    }
+    else
+    {
+        <h4>This is the default footer</h4>
+    }
 
 </body>
 </html>
