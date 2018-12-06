@@ -24,10 +24,9 @@ namespace AspnetCourse.Controllers
         }
 
         [HttpGet]
-        public string Index()
-        {
-            Thread.Sleep(10000);
-            return "Finished";
+        public ViewResult Index()
+        {            
+            return View("About");
         }
 
 
