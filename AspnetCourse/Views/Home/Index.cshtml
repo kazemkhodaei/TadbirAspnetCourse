@@ -1,13 +1,19 @@
-﻿@{
+﻿@model User
+@{
     ViewData["Title"] = DateTime.Now.ToLongTimeString();
 }
 
 <script src="~/js/site.js" asp-append-version="true"></script>
 
 <form>
-    <p>I'm the tag p</p><div bs-button-color="danger">hello</div>
+    <p>I'm the tag p</p>
+<div bs-button-color="danger" bs-for="Name">hello</div>
     <button bs-button-color="danger">hello</button>
 </form>
 
-<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
+<a asp-route="def" asp-route-action="save"></a>
+
+<label asp-for="Address" />
+
+<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000" data-value="Name">
 </div>

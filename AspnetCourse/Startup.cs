@@ -40,7 +40,7 @@ namespace AspnetCourse
 
             services.AddMvc();
             services.AddSession();
-            
+
             services.Configure<RazorViewEngineOptions>(options =>
             {
                 options.ViewLocationExpanders.Add(new CustomViewLocationExpander());
@@ -52,7 +52,13 @@ namespace AspnetCourse
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseSession();
-            app.UseMvcWithDefaultRoute();
+            app.UseMvc(op =>
+            {
+                op.MapRoute("a1", "a1/{controller}/{action}");
+                op.MapRoute("def", "{controller}/{action}");
+            });
+
+            // app.UseMvcWithDefaultRoute();
 
             if (env.IsDevelopment())
             {
