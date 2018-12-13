@@ -26,7 +26,7 @@ namespace AspnetCourse.Controllers
         [HttpGet]
         public ViewResult Index()
         {            
-            return View("About");
+            return View();
         }
 
 

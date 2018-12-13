@@ -38,9 +38,9 @@ namespace AspnetCourse
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddMvc();            
+            services.AddMvc();
             services.AddSession();
-
+            
             services.Configure<RazorViewEngineOptions>(options =>
             {
                 options.ViewLocationExpanders.Add(new CustomViewLocationExpander());
@@ -53,7 +53,11 @@ namespace AspnetCourse
         {
             app.UseSession();
             app.UseMvcWithDefaultRoute();
-            
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
         }
     }
 }
