@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AspnetCourse.Infrastructure
 {
-    [HtmlTargetElement()]
+    [HtmlTargetElement(Attributes = "bs-for")]
     public class ButtonTagHelper : TagHelper
     {
         public string BsButtonColor { get; set; }
@@ -18,11 +18,12 @@ namespace AspnetCourse.Infrastructure
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = "p";
-            output.PreElement.SetContent("everything");
-            output.Attributes.SetAttribute("class", $"btn btn-{BsButtonColor}");
+            //output.TagName = "p";
+            //output.PreElement.SetContent("everything");
+            // output.Attributes.SetAttribute("class", $"btn btn-{BsButtonColor}");
+            output.Content.Append("default content");
 
-            
+            //output.Content.AppendHtml((output.GetChildContentAsync(false)).Result.GetContent());
         }
     }
 }
