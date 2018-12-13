@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AspnetCourse.Infrastructure
 {
-   [HtmlTargetElement("button", Attributes = "bs-button-color", ParentTag = "form")]
+   [HtmlTargetElement(Attributes = "bs-button-color")]
     public class ButtonTagHelper : TagHelper
     {
         public string BsButtonColor { get; set; }
