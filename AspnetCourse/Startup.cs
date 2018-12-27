@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using AspnetCourse.Controllers;
-using AspnetCourse.Infrastructure;
 using AspnetCourse.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -31,29 +32,20 @@ namespace AspnetCourse
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
             services.AddMvc();
-            services.AddSession();
+
+            services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(Configuration["Data:ConnectionString"]));
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                    .AddEntityFrameworkStores<IdentityDbContext>()
+                    .AddDefaultTokenProviders();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseSession();
-            app.UseMvc(op =>
-            {
-                op.MapRoute("a1", "a1/{controller}/{action}");
-                op.MapRoute("def", "{controller}/{action}");
-            });
-
-            // app.UseMvcWithDefaultRoute();
+            app.UseMvcWithDefaultRoute();
 
             if (env.IsDevelopment())
             {

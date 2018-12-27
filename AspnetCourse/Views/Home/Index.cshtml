@@ -3,11 +3,5 @@
     ViewData["Title"] = DateTime.Now.ToLongTimeString();
 }
 
-<script src="~/js/site.js" asp-append-version="true"></script>
-
-<vc:simple-view-component />
-
-@await Component.InvokeAsync("SimpleViewComponent")
-
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000" data-value="Name">
 </div>
