@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -32,9 +33,11 @@ namespace AspnetCourse
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var x = new InMemoryDatabaseRoot();
+
             services.AddMvc();
 
-            services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(Configuration["Data:ConnectionString"]));
+            services.AddDbContext<IdentityDbContext>(options => options.UseInMemoryDatabase("test", x));
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                     .AddEntityFrameworkStores<IdentityDbContext>()
