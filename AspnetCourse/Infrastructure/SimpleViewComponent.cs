@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace AspnetCourse.Infrastructure
 {
-    [ViewComponent(Name = "SimpleViewComponent")]
-    public class SimpleViewComponent : ViewComponent
+    [ViewComponent(Name = "SimpleViewComponent2")]
+    public class SimpleViewComponent2 : ViewComponent
     {
-        public SimpleViewComponent()
+        public SimpleViewComponent2()
         {
 
         }

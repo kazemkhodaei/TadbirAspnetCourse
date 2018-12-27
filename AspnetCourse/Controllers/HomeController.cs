@@ -9,12 +9,15 @@ using AspnetCourse.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 
 namespace AspnetCourse.Controllers
 {
+    [ViewComponent(Name = "SimpleViewComponent")]
     public class HomeController : Controller
     {
 
@@ -33,6 +36,16 @@ namespace AspnetCourse.Controllers
         public IActionResult SetSession(int id)
         {
             return Content((10 / id).ToString());
+        }
+
+        [NonAction]
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            return await Task.FromResult(new ViewViewComponentResult()
+            {
+                ViewName = "MenuView",
+                ViewData = new ViewDataDictionary<int>(ViewData, 4)
+            });
         }
     }
 
