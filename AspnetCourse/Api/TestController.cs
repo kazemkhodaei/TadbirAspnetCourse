@@ -64,13 +64,15 @@ namespace AspnetCourse.Api
             if (ModelState.IsValid)
             {
                 IdentityUser user = await UserManager.FindByEmailAsync(details.Email);
+
+                UserManager.AddClaimAsync(null, new Claim(ClaimTypes.StreetAddress, "tehran - tadbir"));
                 if (user != null)
                 {
                     // cancels any existing session that the user has
                     await SignInManager.SignOutAsync();
 
                     var result = await SignInManager.CheckPasswordSignInAsync(user, details.Password, false);
-
+                    
                     if (result.Succeeded)
                     {
                         // authentication successful so generate jwt token
@@ -83,7 +85,7 @@ namespace AspnetCourse.Api
                             {
                                 new Claim(ClaimTypes.Name, user.Id)
                             }),
-                            Expires = DateTime.UtcNow.AddDays(7),
+                            Expires = DateTime.UtcNow.AddMinutes(1),
                             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                         };
 
@@ -94,6 +96,34 @@ namespace AspnetCourse.Api
             }
 
             return token;
+        }
+
+        [HttpPost("session")]
+        public async Task<ContentResult> SetSession()
+        {
+            HttpContext.Session.SetString("name", "my value 123");
+            await Task.Delay(5000);
+            return Content(HttpContext.User.Identity.Name);
+        }
+
+        [HttpGet("session")]
+        public async Task<ContentResult> GetSession()
+        {
+            return Content(HttpContext.Session.GetString("name"));
+        }
+
+        [Authorize(Policy = "NotAdminPolicy")]
+        [HttpPut]
+        public async Task<ContentResult> Info()
+        {
+            return Content(HttpContext.User.Identity.Name);
+        }
+
+        [Authorize]
+        [HttpPatch]
+        public async Task<ContentResult> Info2()
+        {
+            return Content(HttpContext.User.Identity.Name);
         }
 
         [Authorize]

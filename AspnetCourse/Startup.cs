@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AspnetCourse.Infrastructure;
 using AspnetCourse.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -44,6 +47,10 @@ namespace AspnetCourse
                 options.UseSqlServer(Configuration["Data:ConnectionString"], b => b.MigrationsAssembly("AspnetCourse"));
             });
 
+            // add authorization-requirement handler
+            services.AddTransient<IAuthorizationHandler, NotAdminHandler>();
+            services.AddTransient<IAuthorizationHandler, NotAdminHandler>();
+
             services.AddIdentity<IdentityUser, IdentityRole>()
                     .AddEntityFrameworkStores<IdentityDbContext>()
                     .AddDefaultTokenProviders();
@@ -64,13 +71,30 @@ namespace AspnetCourse
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
+
+                    // add custom token validator, which will provide a CliamsPrincipal object for down stream authorization and authentication layers
+                    // x.SecurityTokenValidators.Clear();
+                    // x.SecurityTokenValidators.Add(new validator());
                 });
+
+            services.AddAuthorization(opts =>
+            {
+                opts.AddPolicy("NotAdminPolicy", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.AddRequirements(new NotAdminRequirement());
+                });
+            });
+
+            services.AddMemoryCache();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseAuthentication();
+            app.UseSession();
             app.UseMvcWithDefaultRoute();
 
             if (env.IsDevelopment())
@@ -84,6 +108,7 @@ namespace AspnetCourse
         private void SeedDatabase(IServiceProvider provider)
         {
             UserManager<IdentityUser> userManager = (UserManager<IdentityUser>)provider.GetRequiredService(typeof(UserManager<IdentityUser>));
+            RoleManager<IdentityRole> roleManager = (RoleManager<IdentityRole>)provider.GetRequiredService(typeof(RoleManager<IdentityRole>));
 
             var identityUser = new IdentityUser
             {
@@ -95,6 +120,13 @@ namespace AspnetCourse
             {
                 IdentityResult result = userManager.CreateAsync(identityUser, "@123123aA").Result;
             }
+
+            if (roleManager.RoleExistsAsync("admin").Result == false)
+            {
+                var result = roleManager.CreateAsync(new IdentityRole("admin")).Result;
+            }
+
+
 
             // THERE IS ANOTHER OPTION:
             /*
@@ -115,4 +147,21 @@ namespace AspnetCourse
 
         }
     }
+
+    /*public class validator : ISecurityTokenValidator
+    {
+        public bool CanValidateToken => throw new NotImplementedException();
+
+        public int MaximumTokenSizeInBytes { get; set; } = 1024;
+
+        public bool CanReadToken(string securityToken)
+        {
+            return true;
+        }
+
+        public ClaimsPrincipal ValidateToken(string securityToken, TokenValidationParameters validationParameters, out SecurityToken validatedToken)
+        {
+            
+        }
+    }*/
 }

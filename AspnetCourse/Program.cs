@@ -21,6 +21,13 @@ namespace AspnetCourse
 
             WebHost.CreateDefaultBuilder(args)
                    .UseDefaultServiceProvider(c => c.ValidateScopes = false)
+                                   .ConfigureLogging(
+                                                    (hostingContext, logging) =>
+                                                    {
+                                                        logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                                                        logging.AddConsole();
+                                                        logging.AddDebug();
+                                                    })
                    .UseStartup<Startup>();
     }
 }
